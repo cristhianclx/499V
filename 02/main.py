@@ -25,5 +25,12 @@ def read():
     }
 
 
-# /read/3
-# {"page": 3, "text": ""}
+@app.route("/read/<int:page_number>")
+def read_page_number(page_number):
+    reader = PdfReader("data/faq.pdf")
+    page = reader.pages[page_number - 1]
+    text = page.extract_text()
+    return {
+        "page": page_number,
+        "text": text,
+    }

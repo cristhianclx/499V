@@ -2,6 +2,7 @@
 
 python3 -m venv venv # crea un entorno virtual (el segundo venv es el nombre de la carpeta)
 source venv/bin/activate # activa el entorno virtual
+source venv\Scripts\activate.bat # activa el entorno virtual (en windows)
 
 pip install Flask
 
@@ -11,3 +12,13 @@ pip install -r requirements.txt --upgrade
 pip freeze # que esta instalado
 
 deactivate # desactiva el entorno virtual
+
+# https://docs.python.org/es/3.8/library/venv.html
+
+# 2da vez
+
+source venv/bin/activate # activa el entorno virtual
+
+
+flask --app main run --reload # correr Flask
+

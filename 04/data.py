@@ -1,18 +1,4 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import Integer, String, Column
-
-class Base(DeclarativeBase):
-    pass
-
-
-db = SQLAlchemy(model_class=Base)
-
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
-
-db.init_app(app)
 
 
 class User(db.Model):
@@ -24,7 +10,6 @@ class User(db.Model):
     last_name = Column(String(50))
     age = Column(Integer)
     language = Column(String(50))
-    city = Column(String(50))
 
     def __init__(self, name=None, last_name=None, age=None, language=None):
         self.name = name
@@ -45,12 +30,3 @@ class Message(db.Model):
 
     def __repr__(self):
         return "<Message {}>".format(self.id)
-    
-
-@app.route("/")
-def index():
-    return ""
-
-
-with app.app_context():
-    db.create_all()

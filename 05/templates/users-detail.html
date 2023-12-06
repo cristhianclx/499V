@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Detalle de usuario</title>
+{% endblock %}
+
+{% block content %}
+    <h1>Detalle de usuario</h1>
+    <hr>
+        <div class="mb-3">
+            <label class="form-label">ID</label>
+            <input type="text" class="form-control-plaintext" name="id" id="id" value="{{ user.id }}">
+          </div>          
+          <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control-plaintext" name="name" id="name" value="{{ user.name }}">
+          </div>          
+          <div class="mb-3">
+            <label class="form-label">Age</label>
+            <input type="text" class="form-control-plaintext" name="age" id="age" value="{{ user.age }}">
+          </div>          
+          <div class="mb-3">
+            <label class="form-label">Content</label>
+            {% if user.content %}
+            <textarea class="form-control-plaintext" name="content" id="content" rows="3">{{ user.content|safe }}</textarea>
+            {% endif %}
+          </div>   
+          <a href="{{ url_for('users') }}" class="btn btn-success">Ver usuarios</a>       
+{% endblock %}

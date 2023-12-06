@@ -14,3 +14,19 @@ flask --app main db upgrade # correr la migracion
 flask --app main db stamp head # por si cambias de base de datos
 flask --app main db migrate # crea la migracion
 flask --app main db upgrade # correr la migracion
+
+
+flask --app main shell
+
+>>> from main import db, User
+>>> user_1 = User(id = 1, name="Cristhian", age=33)
+>>> user_2 = User(id = 2, name="Genaro", age=34)
+>>> db.session.add(user_1)
+>>> db.session.add(user_2)
+>>> db.session.commit()
+
+>>> from main import db, User
+>>> User.query.all()
+
+>>> from main import db, User
+>>> User.query.get_or_404(1)

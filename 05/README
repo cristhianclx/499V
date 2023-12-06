@@ -20,9 +20,7 @@ flask --app main shell
 
 >>> from main import db, User
 >>> user_1 = User(id = 1, name="Cristhian", age=33)
->>> user_2 = User(id = 2, name="Genaro", age=34)
 >>> db.session.add(user_1)
->>> db.session.add(user_2)
 >>> db.session.commit()
 
 >>> from main import db, User
@@ -30,3 +28,20 @@ flask --app main shell
 
 >>> from main import db, User
 >>> User.query.get_or_404(1)
+
+>>> from main import db, User
+>>> user = User.query.filter_by(id = 1).first()
+>>> db.session.delete(user)
+>>> db.session.commit()
+
+>>> from main import db, User, Message
+>>> user_8 = User(id = 8, name="Cristhian", age=33)
+>>> db.session.add(user_8)
+>>> db.session.commit()
+>>> message = Message(id = 1, content="This is a message", user_id=8)
+>>> db.session.add(message)
+>>> db.session.commit()
+
+>>> from main import db, User, Message
+>>> user_8 = User.query.filter_by(id = 8).first()
+>>> Message.query.filter_by(user = user_8).all()

@@ -22,8 +22,9 @@
           <div class="mb-3">
             <label class="form-label">Content</label>
             {% if user.content %}
-            <textarea class="form-control-plaintext" name="content" id="content" rows="3">{{ user.content|safe }}</textarea>
+            <br>
+            {{ user.content|safe }}
             {% endif %}
           </div>   
-          <a href="{{ url_for('users') }}" class="btn btn-success">Ver usuarios</a>       
+          <a href="{{ url_for('users') }}" class="btn btn-success">Ver usuarios</a>
 {% endblock %}

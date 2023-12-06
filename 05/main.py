@@ -57,3 +57,28 @@ def users_add():
 def users_by_id(id):
     user = User.query.get_or_404(id)
     return render_template("users-detail.html", user=user)
+
+@app.route("/users-delete/<id>", methods=["GET", "POST"])
+def users_delete_by_id(id):
+    user = User.query.get_or_404(id)
+    if request.method == "GET":
+        return render_template("users-delete.html", user=user)
+    if request.method == "POST":
+        user = User.query.filter_by(id = id).first()
+        db.session.delete(user)
+        db.session.commit()
+        return redirect(url_for("users"))
+
+@app.route("/messages-by-user/<user_id>")
+def messages_by_user(user_id):
+    user = User.query.filter_by(id = user_id).first()
+    messages = Message.query.filter_by(user = user).all()
+    return render_template("messages-by-user.html", user=user, messages=messages)
+
+@app.route("/messages-add/<user_id>")
+def messages_add(user_id):
+    user = User.query.get_or_404(user_id)
+    if request.method == "GET":
+        return render_template("messages-add.html", user=user)
+    if request.method == "POST":
+        print("TO DO")

@@ -1,0 +1,4 @@
+Flask
+Flask-Migrate
+ipython
+psycopg2

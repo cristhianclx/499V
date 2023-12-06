@@ -31,6 +31,12 @@ flask --app main shell
 
 >>> from main import db, User
 >>> user = User.query.filter_by(id = 1).first()
+>>> user.age = 61
+>>> db.session.add(user)
+>>> db.session.commit()
+
+>>> from main import db, User
+>>> user = User.query.filter_by(id = 1).first()
 >>> db.session.delete(user)
 >>> db.session.commit()
 

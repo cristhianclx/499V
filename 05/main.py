@@ -12,7 +12,7 @@ migrate = Migrate(app, db)
 
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(150), nullable=False)
     age = db.Column(db.Integer, nullable=False)
     content = db.Column(db.Text, nullable=True)
@@ -22,7 +22,7 @@ class User(db.Model):
         return "<User {}>".format(self.id)
 
 class Message(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     content = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
@@ -58,6 +58,19 @@ def users_by_id(id):
     user = User.query.get_or_404(id)
     return render_template("users-detail.html", user=user)
 
+@app.route("/users/edit/<id>", methods=["GET", "POST"])
+def users_edit_by_id(id):
+    user = User.query.get_or_404(id)
+    if request.method == "GET":
+        return render_template("users-edit.html", user=user)
+    if request.method == "POST":
+        user.name = request.form["name"]
+        user.age = request.form["age"]
+        user.content = request.form.get("content", "")
+        db.session.add(user)
+        db.session.commit()
+        return render_template("users-edit.html", user=user, message="Usuario actualizado")
+
 @app.route("/users-delete/<id>", methods=["GET", "POST"])
 def users_delete_by_id(id):
     user = User.query.get_or_404(id)
@@ -75,10 +88,14 @@ def messages_by_user(user_id):
     messages = Message.query.filter_by(user = user).all()
     return render_template("messages-by-user.html", user=user, messages=messages)
 
-@app.route("/messages-add/<user_id>")
+@app.route("/messages-add/<user_id>", methods=["GET", "POST"])
 def messages_add(user_id):
     user = User.query.get_or_404(user_id)
     if request.method == "GET":
         return render_template("messages-add.html", user=user)
     if request.method == "POST":
-        print("TO DO")
+        message = Message(id = request.form["id"], content=request.form["content"], user=user)
+        db.session.add(message)
+        db.session.commit()
+        return render_template("messages-add.html", user=user, message="Mensaje agregado")
+

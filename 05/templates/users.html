@@ -36,6 +36,7 @@
           <td>{{ user.created_at.strftime("%Y-%m-%d %I:%M") }}</td>
           <td>
             <a href="{{ url_for('users_by_id', id=user.id)}}" class="btn btn-primary">Detalle</a>
+            <a href="{{ url_for('users_edit_by_id', id=user.id)}}" class="btn btn-primary">Editar</a>
             <a href="{{ url_for('users_delete_by_id', id=user.id)}}" class="btn btn-danger">Eliminar</a>
             <a href="{{ url_for('messages_by_user', user_id=user.id)}}" class="btn btn-primary">Ver mensajes</a>
           </td>

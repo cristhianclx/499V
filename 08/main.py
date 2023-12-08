@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
-from flask_restful import Resource, Api
+from flask_restful import Api, Resource
+#from flask_restful_swagger_2 import Api, swagger, Resource
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 
@@ -14,7 +15,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 api = Api(app)
-
+# api = Api(app, api_version='0.1', api_spec_url='/docs')
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -79,10 +80,26 @@ class WorkingResource(Resource):
 
 
 class UsersResource(Resource):
+    #@swagger.doc({
+    #    'tags': ['user'],
+    #    'description': 'Returns a list of users',
+    #    'parameters': [
+    #    ],
+    #    'responses': {
+    #    }
+    #})
     def get(self):
         users_data = User.query.all()
         return users_schema.dump(users_data)
     
+    #@swagger.doc({
+    #    'tags': ['user'],
+    #    'description': 'Create a new user',
+    #    'parameters': [
+    #    ],
+    #    'responses': {
+    #    }
+    #})
     def post(self):
         data_user = request.get_json()
         user = User(**data_user)

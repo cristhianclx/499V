@@ -88,3 +88,6 @@ flask --app main shell
 # HTTP/1.1 204 NO CONTENT
 
 # GET /public/users => [{"name": "", "age": ""}, {"name": "", "age": ""}]
+
+# GET /messages/
+# GET /messages/<id>

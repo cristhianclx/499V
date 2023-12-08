@@ -50,6 +50,27 @@ user_schema = UserSchema()
 users_schema = UserSchema(many = True)
 
 
+class PublicUserSchema(ma.Schema):
+    class Meta:
+        fields = ("name", "age")
+        model = User
+
+
+public_users_schema = PublicUserSchema(many = True)
+
+
+class MessageSchema(ma.Schema):
+    user = ma.Nested(UserSchema)
+    class Meta:
+        fields = ("id", "content", "created_at", "user")
+        model = Message
+        datetimeformat = "%Y-%m-%d-%H:%M"
+
+
+message_schema = MessageSchema()
+messages_schema = MessageSchema(many = True)
+
+
 class WorkingResource(Resource):
     def get(self):
         return {
@@ -92,10 +113,25 @@ class UsersByIDResource(Resource):
 
 class PublicUsersResource(Resource):
     def get(self):
-        pass
+        users_data = User.query.all()
+        return public_users_schema.dump(users_data)
+
+
+class MessagesResource(Resource):
+    def get(self):
+        messages_data = Message.query.all()
+        return messages_schema.dump(messages_data)
+
+
+class MessageByIDResource(Resource):
+    def get(self, message_id):
+        message = Message.query.get_or_404(message_id)
+        return message_schema.dump(message)
 
 
 api.add_resource(WorkingResource, "/")
 api.add_resource(UsersResource, "/users")
 api.add_resource(UsersByIDResource, "/users/<int:user_id>")
 api.add_resource(PublicUsersResource, "/public/users")
+api.add_resource(MessagesResource, "/messages")
+api.add_resource(MessageByIDResource, "/messages/<int:message_id>")

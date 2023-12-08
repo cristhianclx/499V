@@ -1,0 +1,6 @@
+Flask
+flask-marshmallow
+Flask-Migrate
+flask-restful
+httpie
+ipython

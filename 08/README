@@ -1,0 +1,88 @@
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt --upgrade
+
+flask --app main run --reload
+
+flask --app main db init # inicializar la base de datos
+
+# cada vez que hay cambio en los modelos que reflejan base de datos
+flask --app main db migrate # crea la migracion
+flask --app main db upgrade # correr la migracion
+
+
+flask --app main shell
+
+>>> from main import db, User
+>>> user_1 = User(id = 1, name="Cristhian", age=33)
+>>> db.session.add(user_1)
+>>> db.session.commit()
+
+>>> from main import db, User
+>>> User.query.all()
+
+>>> from main import db, User
+>>> User.query.get_or_404(1)
+
+>>> from main import db, User
+>>> user = User.query.filter_by(id = 1).first()
+>>> user.age = 61
+>>> db.session.add(user)
+>>> db.session.commit()
+
+>>> from main import db, User
+>>> user = User.query.filter_by(id = 1).first()
+>>> db.session.delete(user)
+>>> db.session.commit()
+
+>>> from main import db, User, Message
+>>> user_8 = User(id = 8, name="Cristhian", age=33)
+>>> db.session.add(user_8)
+>>> db.session.commit()
+>>> message = Message(id = 1, content="This is a message", user_id=8)
+>>> db.session.add(message)
+>>> db.session.commit()
+
+>>> from main import db, User, Message
+>>> user_8 = User.query.filter_by(id = 8).first()
+>>> Message.query.filter_by(user = user_8).all()
+
+# GET /users => [{usuarios}]
+
+# POST /users => {crear un usuario}
+
+# http POST http://127.0.0.1:5000/users id=3 name=Jesus age=33
+# HTTP/1.1 201 CREATED
+# {
+#     "age": 33,
+#     "created": "2023-12-08-01:01",
+#     "id": 3,
+#     "name": "Jesus"
+# }
+
+# GET /users/id => {devolver un usuario}
+
+# http GET http://127.0.0.1:5000/users/1
+# HTTP/1.1 200 OK
+# {
+#     "age": 33,
+#     "created": "2023-12-08-00:58",
+#     "id": 1,
+#     "name": "Cristhian"
+# }
+
+# PATCH /users/id => {actualizar un usuario}
+
+# http PATCH http://127.0.0.1:5000/users/1 age=28
+# HTTP/1.1 200 OK
+# {
+#     "age": 28,
+#     "created": "2023-12-08-00:58",
+#     "id": 1,
+#     "name": "Cristhian"
+# }
+
+# DELETE /users/id => usuario borrado
+
+# http DELETE http://127.0.0.1:5000/users/1 
+# HTTP/1.1 204 NO CONTENT

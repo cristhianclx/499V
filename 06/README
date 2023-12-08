@@ -1,0 +1,17 @@
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt --upgrade
+
+flask --app main run --reload
+
+flask --app main db init # inicializar la base de datos
+
+# cada vez que hay cambio en los modelos que reflejan base de datos
+flask --app main db migrate # crea la migracion
+flask --app main db upgrade # correr la migracion
+
+
+# definir rutas y posibles respuestas
+
+# GET / => {working: True}
+# GET /pokemon-by-name/<name>/ => {"name": "pikachu", "height": "4kg", "abilities": ["electric"]}

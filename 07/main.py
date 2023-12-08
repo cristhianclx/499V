@@ -60,58 +60,34 @@ class UsersResource(Resource):
 
 class UsersByIDResource(Resource):
     def get(self, user_id):
-        # TO DO
-        return {}
+        user = User.query.get_or_404(user_id)
+        return {
+            "id": user.id,
+            "name": user.name,
+            "age": user.age,
+            "created": user.created_at.strftime("%Y-%m-%d-%H:%M"),
+        }
+    
+    def patch(self, user_id):
+        user = User.query.get_or_404(user_id)
+        data_user = request.get_json()
+        user.name = data_user.get("name", user.name)
+        user.age = data_user.get("age", user.age)
+        db.session.commit()
+        return {
+            "id": user.id,
+            "name": user.name,
+            "age": user.age,
+            "created": user.created_at.strftime("%Y-%m-%d-%H:%M"),
+        }
+
+    def delete(self, user_id):
+        user = User.query.get_or_404(user_id)
+        db.session.delete(user)
+        db.session.commit()
+        return {}, 204
 
 
 api.add_resource(WorkingResource, "/")
 api.add_resource(UsersResource, "/users")
 api.add_resource(UsersByIDResource, "/users/<int:user_id>")
-
-
-@app.route("/users/<id>")
-def users_by_id(id):
-    user = User.query.get_or_404(id)
-    return render_template("users-detail.html", user=user)
-
-@app.route("/users/edit/<id>", methods=["GET", "POST"])
-def users_edit_by_id(id):
-    user = User.query.get_or_404(id)
-    if request.method == "GET":
-        return render_template("users-edit.html", user=user)
-    if request.method == "POST":
-        user.name = request.form["name"]
-        user.age = request.form["age"]
-        user.content = request.form.get("content", "")
-        db.session.add(user)
-        db.session.commit()
-        return render_template("users-edit.html", user=user, message="Usuario actualizado")
-
-@app.route("/users-delete/<id>", methods=["GET", "POST"])
-def users_delete_by_id(id):
-    user = User.query.get_or_404(id)
-    if request.method == "GET":
-        return render_template("users-delete.html", user=user)
-    if request.method == "POST":
-        user = User.query.filter_by(id = id).first()
-        db.session.delete(user)
-        db.session.commit()
-        return redirect(url_for("users"))
-
-@app.route("/messages-by-user/<user_id>")
-def messages_by_user(user_id):
-    user = User.query.filter_by(id = user_id).first()
-    messages = Message.query.filter_by(user = user).all()
-    return render_template("messages-by-user.html", user=user, messages=messages)
-
-@app.route("/messages-add/<user_id>", methods=["GET", "POST"])
-def messages_add(user_id):
-    user = User.query.get_or_404(user_id)
-    if request.method == "GET":
-        return render_template("messages-add.html", user=user)
-    if request.method == "POST":
-        message = Message(id = request.form["id"], content=request.form["content"], user=user)
-        db.session.add(message)
-        db.session.commit()
-        return render_template("messages-add.html", user=user, message="Mensaje agregado")
-

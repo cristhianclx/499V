@@ -48,12 +48,11 @@ flask --app main shell
 >>> Message.query.filter_by(user = user_8).all()
 
 # GET /users => [{usuarios}]
+
 # POST /users => {crear un usuario}
 
 # http POST http://127.0.0.1:5000/users id=3 name=Jesus age=33
-
 # HTTP/1.1 201 CREATED
-# Content-Type: application/json
 # {
 #     "age": 33,
 #     "created": "2023-12-08-01:01",
@@ -61,7 +60,29 @@ flask --app main shell
 #     "name": "Jesus"
 # }
 
-
 # GET /users/id => {devolver un usuario}
+
+# http GET http://127.0.0.1:5000/users/1
+# HTTP/1.1 200 OK
+# {
+#     "age": 33,
+#     "created": "2023-12-08-00:58",
+#     "id": 1,
+#     "name": "Cristhian"
+# }
+
 # PATCH /users/id => {actualizar un usuario}
+
+# http PATCH http://127.0.0.1:5000/users/1 age=28
+# HTTP/1.1 200 OK
+# {
+#     "age": 28,
+#     "created": "2023-12-08-00:58",
+#     "id": 1,
+#     "name": "Cristhian"
+# }
+
 # DELETE /users/id => usuario borrado
+
+# http DELETE http://127.0.0.1:5000/users/1 
+# HTTP/1.1 204 NO CONTENT

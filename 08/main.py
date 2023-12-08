@@ -86,6 +86,7 @@ class UsersResource(Resource):
     def post(self):
         data_user = request.get_json()
         user = User(**data_user)
+        # user = User(id = data_user["id"], name = data_user["name"], age = data_user["age"])
         db.session.add(user)
         db.session.commit()
         return user_schema.dump(user), 201

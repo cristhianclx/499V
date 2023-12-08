@@ -90,6 +90,12 @@ class UsersByIDResource(Resource):
         return {}, 204
 
 
+class PublicUsersResource(Resource):
+    def get(self):
+        pass
+
+
 api.add_resource(WorkingResource, "/")
 api.add_resource(UsersResource, "/users")
 api.add_resource(UsersByIDResource, "/users/<int:user_id>")
+api.add_resource(PublicUsersResource, "/public/users")

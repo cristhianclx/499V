@@ -67,12 +67,7 @@ class UsersResource(Resource):
         user = User(**data_user)
         db.session.add(user)
         db.session.commit()
-        return {
-            "id": user.id,
-            "name": user.name,
-            "age": user.age,
-            "created": user.created_at.strftime("%Y-%m-%d-%H:%M"),
-        }, 201
+        return user_schema.dump(user), 201
     
 
 class UsersByIDResource(Resource):
@@ -86,12 +81,7 @@ class UsersByIDResource(Resource):
         user.name = data_user.get("name", user.name)
         user.age = data_user.get("age", user.age)
         db.session.commit()
-        return {
-            "id": user.id,
-            "name": user.name,
-            "age": user.age,
-            "created": user.created_at.strftime("%Y-%m-%d-%H:%M"),
-        }
+        return user_schema.dump(user)
 
     def delete(self, user_id):
         user = User.query.get_or_404(user_id)

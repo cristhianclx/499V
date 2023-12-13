@@ -1,0 +1,9 @@
+Flask
+flask-marshmallow
+Flask-Migrate
+flask-restful
+flask-restful-swagger-2
+httpie
+ipython
+gunicorn
+gevent

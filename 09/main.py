@@ -48,9 +48,17 @@ def home():
     return render_template("home.html", messages=messages)
     
 
+def messagesReceived(methods = ["GET", "POST"]):
+    print("message was received")
+
+
 @socketio.on("messages")
 def handle_messages(data, methods=["GET", "POST"]):
+    message = Message(**data)
+    db.session.add(message)
+    db.session.commit()
     print("received data: " + str(data))
+    socketio.emit("messages-responses", data, callback=messagesReceived)
 
 
 @socketio.on("welcome")

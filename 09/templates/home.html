@@ -7,16 +7,19 @@
           var socket = io();
           socket.on('connect', function() {
             socket.emit('welcome', {message: 'User connected!'});
-          });
-          $("#form").on("submit", function(e){
-            e.preventDefault();
-            let user = $("#username").val();
-            let message = $("#message").val();
-            socket.emit("messages", {
+            $("#form").on("submit", function(e){
+              e.preventDefault();
+              let user = $("#username").val();
+              let message = $("#message").val();
+              socket.emit("messages", {
                 user: user,
                 message: message,
+              })
+              $("#message").val("").focus();
             })
-            $("message").val("").focus();
+          });
+          socket.on("messages-responses", function(msg){
+            $("#messages").append("<p><b>" + msg.user + ":</b> " + msg.message + "</p>");
           })
         </script>
     </head>
@@ -33,6 +36,5 @@
             <p><b>{{ message.user }}:</b> {{ message.message }}</p>
             {% endfor %}
         </div>
-
     </body>
 </html>

@@ -1,0 +1,34 @@
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt --upgrade
+
+flask --app main run --reload
+
+http POST 127.0.0.1:5000/login username=alumno password=123456
+HTTP/1.1 200 OK
+
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjQzNTk0MSwianRpIjoiYTU2NjQ3MDItY2UyYS00YjA3LTkxOTEtZmM2NmY4YjM2YTY0IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImFsdW1ubyIsIm5iZiI6MTcwMjQzNTk0MSwiZXhwIjoxNzAyNDM2ODQxfQ.y3uWPrJw-0tbFJY2NIEtDtOfNPlQjbgkP_plKXjAGaU"
+}
+
+http GET 127.0.0.1:5000/non-protected
+HTTP/1.1 200 OK
+
+{
+    "working": true
+}
+
+http GET 127.0.0.1:5000/protected
+HTTP/1.1 401 UNAUTHORIZED
+
+{
+    "msg": "Missing Authorization Header"
+}
+
+http GET 127.0.0.1:5000/protected "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjQzNTk0MSwianRpIjoiYTU2NjQ3MDItY2UyYS00YjA3LTkxOTEtZmM2NmY4YjM2YTY0IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImFsdW1ubyIsIm5iZiI6MTcwMjQzNTk0MSwiZXhwIjoxNzAyNDM2ODQxfQ.y3uWPrJw-0tbFJY2NIEtDtOfNPlQjbgkP_plKXjAGaU"
+HTTP/1.1 200 OK
+
+{
+    "logged_in_as": "alumno"
+}
+

@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <title>WS</title>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+        <script type="text/javascript" charset="utf-8">
+          var socket = io();
+          socket.on('connect', function() {
+            socket.emit('welcome', {message: 'User connected!'});
+          });
+          $("#form").on("submit", function(e){
+            e.preventDefault();
+            let user = $("#username").val();
+            let message = $("#message").val();
+            socket.emit("messages", {
+                user: user,
+                message: message,
+            })
+            $("message").val("").focus();
+          })
+        </script>
+    </head>
+    <body>
+        <h1>Bienvenido</h1>
+        <form action="" method="POST" id="form">
+            <input type="text" name="username" id="username" placeholder="User" />
+            <input type="text" name="message" id="message" placeholder="Message" />
+            <input type="submit" text="Enviar" />
+        </form>
+        <h2>Mensajes</h2>
+        <div id="messages">
+            {% for message in messages %}
+            <p><b>{{ message.user }}:</b> {{ message.message }}</p>
+            {% endfor %}
+        </div>
+
+    </body>
+</html>

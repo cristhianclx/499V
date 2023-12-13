@@ -24,6 +24,7 @@ class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user = db.Column(db.Text, nullable=False)
     message = db.Column(db.Text, nullable=False)
+    # importance # low, high
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
     def __repr__(self):

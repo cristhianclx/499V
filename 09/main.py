@@ -4,6 +4,7 @@ from flask_socketio import SocketIO
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
+from sqlalchemy_utils import ChoiceType
 
 
 app = Flask(__name__)
@@ -21,10 +22,16 @@ socketio = SocketIO(app)
 
 
 class Message(db.Model):
+    IMPORTANCE_CHOICES = [
+        ('high', 'High'),
+        ('low', 'Low')
+    ]
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user = db.Column(db.Text, nullable=False)
     message = db.Column(db.Text, nullable=False)
-    # importance # low, high
+    #importance = ChoiceType(IMPORTANCE_CHOICES, impl=db.String(length=10))
+    importance = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
     def __repr__(self):
@@ -33,7 +40,7 @@ class Message(db.Model):
 
 class MessageSchema(ma.Schema):
     class Meta:
-        fields = ("id", "user", "message", "created_at")
+        fields = ("id", "user", "message", "importance", "created_at")
         model = Message
         datetimeformat = "%Y-%m-%d-%H:%M"
 

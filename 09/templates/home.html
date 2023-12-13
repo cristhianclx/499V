@@ -12,15 +12,21 @@
               e.preventDefault();
               let user = $("#username").val();
               let message = $("#message").val();
+              let importance = $("#importance").val();
               socket.emit("messages", {
                 user: user,
                 message: message,
+                importance: importance,
               })
               $("#message").val("").focus();
             })
           });
           socket.on("messages-responses", function(msg){
-            $("#messages").append("<p><b>" + msg.user + ":</b> " + msg.message + "</p>");
+            if (msg.importance == "high") {
+              $("#messages").append("<p><b>" + msg.user + ":</b> " + msg.message + " <span class='badge bg-danger'>High</span></p>";
+            } else {
+              $("#messages").append("<p><b>" + msg.user + ":</b> " + msg.message + "</p>";
+            }
           })
         </script>
     </head>
@@ -44,13 +50,14 @@
                 <form action="" method="POST" id="form">  
                     <input type="text" name="username" id="username" class="form-control" placeholder="User" />
                     <input type="text" name="message" id="message" class="form-control" placeholder="Message" />
+                    <input type="text" name="importance" id="importance" class="form-control" placeholder="low" value="low" />
                     <button type="submit" class="btn btn-primary">Enviar</button>
                 </form>
                 <hr>
                 <h2>Mensajes</h2>
                 <div id="messages">
                     {% for message in messages %}
-                    <p><b>{{ message.user }}:</b> {{ message.message }}</p>
+                    <p><b>{{ message.user }}:</b> {{ message.message }} {% if message.importance == "high" %}<span class="badge bg-danger">High</span>{% endif %}</p>
                     {% endfor %}
                 </div>
 
